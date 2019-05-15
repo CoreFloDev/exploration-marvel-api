@@ -1,9 +1,9 @@
-package io.coreflodev.exampleapplication.list
+package io.coreflodev.exampleapplication.posts
 
 import io.coreflodev.exampleapplication.common.arch.Screen
 import io.coreflodev.exampleapplication.common.arch.ScreenView
-import io.coreflodev.exampleapplication.list.injection.ListScope
-import io.coreflodev.exampleapplication.list.repo.ListRepository
+import io.coreflodev.exampleapplication.posts.injection.PostsScope
+import io.coreflodev.exampleapplication.posts.repo.PostsRepository
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,27 +11,26 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
-@ListScope
-class ListScreen @Inject constructor(
-    private val listRepository: ListRepository
-) : Screen<ListInput, ListOutput>() {
+@PostsScope
+class PostsScreen @Inject constructor(
+    private val postsRepository: PostsRepository
+) : Screen<PostsInput, PostsOutput>() {
 
-    private val input: Subject<ListInput> = PublishSubject.create()
-    private val output: Observable<ListOutput>
+    private val input: Subject<PostsInput> = PublishSubject.create()
+    private val output: Observable<PostsOutput>
 
     init {
         output = input.compose(convertInputToAction())
             .publish {
                 Observable.mergeArray(
                     it.ofType(Action.ItemClicked::class.java).compose(navigateToDetails()),
-                    it.ofType(Action.InitialAction::class.java).compose(loadListOfPost(listRepository))
+                    it.ofType(Action.InitialAction::class.java).compose(loadListOfPost(postsRepository))
                 )
             }
             .compose(convertResultToOutput())
-
     }
 
-    override fun onAttach(view: ScreenView<ListInput, ListOutput>) {
+    override fun onAttach(view: ScreenView<PostsInput, PostsOutput>) {
         add(
             output.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::render),
@@ -55,7 +54,7 @@ class ListScreen @Inject constructor(
 
             object Loading : UiUpdate()
 
-            data class Display(val data: List<ListRepository.Post>) : UiUpdate()
+            data class Display(val data: List<PostsRepository.Post>) : UiUpdate()
         }
 
         sealed class Navigation : Result() {
@@ -65,10 +64,10 @@ class ListScreen @Inject constructor(
 
     companion object {
 
-        fun convertInputToAction() = ObservableTransformer<ListInput, Action> { observable ->
+        fun convertInputToAction() = ObservableTransformer<PostsInput, Action> { observable ->
             observable.map { input ->
                 when (input) {
-                    is ListInput.ItemClicked -> Action.ItemClicked(input.id)
+                    is PostsInput.ItemClicked -> Action.ItemClicked(input.id)
                 } as Action
             }
                 .startWith(Action.InitialAction)
@@ -80,7 +79,7 @@ class ListScreen @Inject constructor(
             }
         }
 
-        fun convertResultToOutput() = ObservableTransformer<Result, ListOutput> { observable ->
+        fun convertResultToOutput() = ObservableTransformer<Result, PostsOutput> { observable ->
             val upstream = observable
                 .publish()
                 .autoConnect()
@@ -96,13 +95,13 @@ class ListScreen @Inject constructor(
             Observable.merge(models, navigation)
         }
 
-        fun reducingUiState() = ObservableTransformer<Result.UiUpdate, ListOutput> { observable ->
+        fun reducingUiState() = ObservableTransformer<Result.UiUpdate, PostsOutput> { observable ->
             observable.map { uiState ->
                 when (uiState) {
-                    Result.UiUpdate.Error -> ListOutput.Error
-                    Result.UiUpdate.Loading -> ListOutput.Loading
-                    is Result.UiUpdate.Display -> ListOutput.Display(uiState.data.map {
-                        PostViewModel(
+                    Result.UiUpdate.Error -> PostsOutput.Error
+                    Result.UiUpdate.Loading -> PostsOutput.Loading
+                    is Result.UiUpdate.Display -> PostsOutput.Display(uiState.data.map {
+                        PostsViewModel(
                             it.id,
                             it.content
                         )
@@ -111,20 +110,20 @@ class ListScreen @Inject constructor(
             }
         }
 
-        fun reducingNavigation() = ObservableTransformer<Result.Navigation, ListOutput> { observable ->
+        fun reducingNavigation() = ObservableTransformer<Result.Navigation, PostsOutput> { observable ->
             observable.map { navigationState ->
                 when (navigationState) {
-                    is Result.Navigation.ToDetails -> ListOutput.ToDetail(navigationState.id)
+                    is Result.Navigation.ToDetails -> PostsOutput.ToDetail(navigationState.id)
                 }
             }
         }
 
-        fun loadListOfPost(listRepository: ListRepository) =
+        fun loadListOfPost(postsRepository: PostsRepository) =
             ObservableTransformer<Action.InitialAction, Result> { observable ->
                 observable.flatMap {
-                    listRepository.getListOfPosts()
+                    postsRepository.getListOfPosts()
                         .map { Result.UiUpdate.Display(it) as Result }
-                        //.onErrorReturn { Result.UiUpdate.Error }
+                        .onErrorReturn { Result.UiUpdate.Error }
                         .startWith(Result.UiUpdate.Loading)
 
                 }

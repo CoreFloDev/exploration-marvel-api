@@ -15,11 +15,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".list.ui.ListActivity" />
+        <activity android:name=".posts.ui.PostsActivity" />
 
         <activity-alias
             android:name=".Launcher"
-            android:targetActivity=".list.ui.ListActivity">
+            android:targetActivity=".posts.ui.PostsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -1,13 +1,13 @@
-package io.coreflodev.exampleapplication.list.injection
+package io.coreflodev.exampleapplication.posts.injection
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import io.coreflodev.exampleapplication.ExampleApplication
 
-class ListStateHolder(app: Application) : AndroidViewModel(app) {
+class PostsStateHolder(app: Application) : AndroidViewModel(app) {
 
-    val listComponent: ListComponent =
-        DaggerListComponent.builder()
+    val postsComponent: PostsComponent =
+        DaggerPostsComponent.builder()
             .applicationComponent(ExampleApplication.applicationComponent(app))
             .build()
 }

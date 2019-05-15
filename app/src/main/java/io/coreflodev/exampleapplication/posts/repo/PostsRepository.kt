@@ -1,8 +1,8 @@
-package io.coreflodev.exampleapplication.list.repo
+package io.coreflodev.exampleapplication.posts.repo
 
 import io.reactivex.Observable
 
-interface ListRepository {
+interface PostsRepository {
 
     fun getListOfPosts(): Observable<List<Post>>
 

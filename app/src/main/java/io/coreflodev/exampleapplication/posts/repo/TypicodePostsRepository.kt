@@ -1,22 +1,22 @@
-package io.coreflodev.exampleapplication.list.repo
+package io.coreflodev.exampleapplication.posts.repo
 
 import io.coreflodev.exampleapplication.common.network.TypicodeApi
-import io.coreflodev.exampleapplication.list.injection.ListScope
+import io.coreflodev.exampleapplication.posts.injection.PostsScope
 import io.reactivex.Observable
 import javax.inject.Inject
 
-@ListScope
-class TypicodeListRepository @Inject constructor(
+@PostsScope
+class TypicodePostsRepository @Inject constructor(
     private val typicodeApi: TypicodeApi
-) : ListRepository {
+) : PostsRepository {
 
-    override fun getListOfPosts(): Observable<List<ListRepository.Post>> =
+    override fun getListOfPosts(): Observable<List<PostsRepository.Post>> =
         typicodeApi
             .getPosts()
             .toObservable()
             .map { postsList ->
                 postsList.map {
-                    ListRepository.Post(
+                    PostsRepository.Post(
                         id = it.id,
                         content = it.body
                     )
