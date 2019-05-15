@@ -2,18 +2,19 @@ package io.coreflodev.exampleapplication.posts
 
 import io.coreflodev.exampleapplication.common.arch.Screen
 import io.coreflodev.exampleapplication.common.arch.ScreenView
-import io.coreflodev.exampleapplication.posts.injection.PostsScope
-import io.coreflodev.exampleapplication.posts.repo.PostsRepository
+import io.coreflodev.exampleapplication.posts.use_cases.Action
+import io.coreflodev.exampleapplication.posts.use_cases.LoadListOfPostsUseCase
+import io.coreflodev.exampleapplication.posts.use_cases.NavigateToDetailsUseCase
+import io.coreflodev.exampleapplication.posts.use_cases.Result
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import javax.inject.Inject
 
-@PostsScope
-class PostsScreen @Inject constructor(
-    private val postsRepository: PostsRepository
+class PostsScreen(
+    loadListOfPostsUseCase: LoadListOfPostsUseCase,
+    navigateToDetailsUseCase: NavigateToDetailsUseCase
 ) : Screen<PostsInput, PostsOutput>() {
 
     private val input: Subject<PostsInput> = PublishSubject.create()
@@ -23,8 +24,8 @@ class PostsScreen @Inject constructor(
         output = input.compose(convertInputToAction())
             .publish {
                 Observable.mergeArray(
-                    it.ofType(Action.ItemClicked::class.java).compose(navigateToDetails()),
-                    it.ofType(Action.InitialAction::class.java).compose(loadListOfPost(postsRepository))
+                    it.ofType(Action.ItemClicked::class.java).compose(navigateToDetailsUseCase()),
+                    it.ofType(Action.InitialAction::class.java).compose(loadListOfPostsUseCase())
                 )
             }
             .compose(convertResultToOutput())
@@ -41,27 +42,6 @@ class PostsScreen @Inject constructor(
     }
 
 
-    sealed class Action {
-        data class ItemClicked(val id: String) : Action()
-
-        object InitialAction : Action()
-    }
-
-    sealed class Result {
-
-        sealed class UiUpdate : Result() {
-            object Error : UiUpdate()
-
-            object Loading : UiUpdate()
-
-            data class Display(val data: List<PostsRepository.Post>) : UiUpdate()
-        }
-
-        sealed class Navigation : Result() {
-            data class ToDetails(val id: String) : Navigation()
-        }
-    }
-
     companion object {
 
         fun convertInputToAction() = ObservableTransformer<PostsInput, Action> { observable ->
@@ -71,12 +51,6 @@ class PostsScreen @Inject constructor(
                 } as Action
             }
                 .startWith(Action.InitialAction)
-        }
-
-        fun navigateToDetails() = ObservableTransformer<Action.ItemClicked, Result> { observable ->
-            observable.map {
-                Result.Navigation.ToDetails(it.id)
-            }
         }
 
         fun convertResultToOutput() = ObservableTransformer<Result, PostsOutput> { observable ->
@@ -117,16 +91,5 @@ class PostsScreen @Inject constructor(
                 }
             }
         }
-
-        fun loadListOfPost(postsRepository: PostsRepository) =
-            ObservableTransformer<Action.InitialAction, Result> { observable ->
-                observable.flatMap {
-                    postsRepository.getListOfPosts()
-                        .map { Result.UiUpdate.Display(it) as Result }
-                        .onErrorReturn { Result.UiUpdate.Error }
-                        .startWith(Result.UiUpdate.Loading)
-
-                }
-            }
     }
 }

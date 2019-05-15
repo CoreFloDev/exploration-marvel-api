@@ -1,12 +1,9 @@
 package io.coreflodev.exampleapplication.posts.repo
 
 import io.coreflodev.exampleapplication.common.network.TypicodeApi
-import io.coreflodev.exampleapplication.posts.injection.PostsScope
 import io.reactivex.Observable
-import javax.inject.Inject
 
-@PostsScope
-class TypicodePostsRepository @Inject constructor(
+class TypicodePostsRepository(
     private val typicodeApi: TypicodeApi
 ) : PostsRepository {
 
