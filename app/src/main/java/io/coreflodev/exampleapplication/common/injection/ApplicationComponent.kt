@@ -1,12 +1,12 @@
 package io.coreflodev.exampleapplication.common.injection
 
 import dagger.Component
-import retrofit2.Retrofit
+import io.coreflodev.exampleapplication.common.network.TypicodeApi
 
 @ApplicationScope
 @Component(modules = [ApplicationModule::class])
 interface ApplicationComponent {
 
-    fun retrofit(): Retrofit
+    fun typicodeApi(): TypicodeApi
 
 }

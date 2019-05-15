@@ -55,7 +55,7 @@ class ListScreen @Inject constructor(
 
             object Loading : UiUpdate()
 
-            data class Display(val data: List<String>) : UiUpdate()
+            data class Display(val data: List<ListRepository.Post>) : UiUpdate()
         }
 
         sealed class Navigation : Result() {
@@ -65,25 +65,23 @@ class ListScreen @Inject constructor(
 
     companion object {
 
-        fun convertInputToAction() = ObservableTransformer<ListInput, Action> {
-            it
-                .map { input ->
-                    when (input) {
-                        is ListInput.ItemClicked -> Action.ItemClicked(input.id)
-                    } as Action
-                }
+        fun convertInputToAction() = ObservableTransformer<ListInput, Action> { observable ->
+            observable.map { input ->
+                when (input) {
+                    is ListInput.ItemClicked -> Action.ItemClicked(input.id)
+                } as Action
+            }
                 .startWith(Action.InitialAction)
         }
 
-        fun navigateToDetails() = ObservableTransformer<Action.ItemClicked, Result> {
-            it
-                .map {
-                    Result.Navigation.ToDetails(it.id)
-                }
+        fun navigateToDetails() = ObservableTransformer<Action.ItemClicked, Result> { observable ->
+            observable.map {
+                Result.Navigation.ToDetails(it.id)
+            }
         }
 
-        fun convertResultToOutput() = ObservableTransformer<Result, ListOutput> {
-            val upstream = it
+        fun convertResultToOutput() = ObservableTransformer<Result, ListOutput> { observable ->
+            val upstream = observable
                 .publish()
                 .autoConnect()
 
@@ -98,33 +96,38 @@ class ListScreen @Inject constructor(
             Observable.merge(models, navigation)
         }
 
-        fun reducingUiState() = ObservableTransformer<Result.UiUpdate, ListOutput> {
-            it.map { uiState ->
+        fun reducingUiState() = ObservableTransformer<Result.UiUpdate, ListOutput> { observable ->
+            observable.map { uiState ->
                 when (uiState) {
                     Result.UiUpdate.Error -> ListOutput.Error
                     Result.UiUpdate.Loading -> ListOutput.Loading
-                    is Result.UiUpdate.Display -> ListOutput.Display(uiState.data)
+                    is Result.UiUpdate.Display -> ListOutput.Display(uiState.data.map {
+                        PostViewModel(
+                            it.id,
+                            it.content
+                        )
+                    })
                 }
             }
         }
 
-        fun reducingNavigation() = ObservableTransformer<Result.Navigation, ListOutput> {
-            it.map { navigationState ->
+        fun reducingNavigation() = ObservableTransformer<Result.Navigation, ListOutput> { observable ->
+            observable.map { navigationState ->
                 when (navigationState) {
                     is Result.Navigation.ToDetails -> ListOutput.ToDetail(navigationState.id)
                 }
             }
         }
 
-        fun loadListOfPost(listRepository: ListRepository) = ObservableTransformer<Action.InitialAction, Result> {
-            it
-                .flatMap {
-                    listRepository.getList()
-                        .map { Result.UiUpdate.Display(listOf("test")) as Result }
-                        .onErrorReturn { Result.UiUpdate.Error }
+        fun loadListOfPost(listRepository: ListRepository) =
+            ObservableTransformer<Action.InitialAction, Result> { observable ->
+                observable.flatMap {
+                    listRepository.getListOfPosts()
+                        .map { Result.UiUpdate.Display(it) as Result }
+                        //.onErrorReturn { Result.UiUpdate.Error }
                         .startWith(Result.UiUpdate.Loading)
 
                 }
-        }
+            }
     }
 }

@@ -4,5 +4,7 @@ import io.reactivex.Observable
 
 interface ListRepository {
 
-    fun getList() : Observable<Any>
+    fun getListOfPosts(): Observable<List<Post>>
+
+    data class Post(val id: String, val content: String)
 }
