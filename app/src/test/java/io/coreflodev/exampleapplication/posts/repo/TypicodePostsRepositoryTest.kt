@@ -2,6 +2,7 @@ package io.coreflodev.exampleapplication.posts.repo
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import io.coreflodev.exampleapplication.common.network.posts.Post
 import io.coreflodev.exampleapplication.common.network.TypicodeApi
 import io.reactivex.Single
 import org.junit.Test
@@ -35,7 +36,7 @@ class TypicodePostsRepositoryTest {
         private const val AN_ID = "anId"
         private const val A_BODY = "aBody"
 
-        private val AN_API_POST = TypicodeApi.Post(
+        private val AN_API_POST = Post(
             id = AN_ID,
             body = A_BODY,
             title = "aTitle",

@@ -1,4 +1,4 @@
-package io.coreflodev.exampleapplication
+package io.coreflodev.exampleapplication.common
 
 import android.app.Application
 import android.content.Context

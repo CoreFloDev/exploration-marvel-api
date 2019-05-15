@@ -2,7 +2,7 @@ package io.coreflodev.exampleapplication.posts.injection
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import io.coreflodev.exampleapplication.ExampleApplication
+import io.coreflodev.exampleapplication.common.ExampleApplication
 
 class PostsStateHolder(app: Application) : AndroidViewModel(app) {
 
