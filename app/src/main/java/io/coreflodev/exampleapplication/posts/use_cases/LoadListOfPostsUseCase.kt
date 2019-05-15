@@ -9,9 +9,8 @@ class LoadListOfPostsUseCase(private val postsRepository: PostsRepository) {
         observable.flatMap {
             postsRepository.getListOfPosts()
                 .map { Result.UiUpdate.Display(it) as Result }
-                .onErrorReturn { Result.UiUpdate.Error }
+                .onErrorReturnItem(Result.UiUpdate.Error)
                 .startWith(Result.UiUpdate.Loading)
-
         }
     }
 

@@ -41,7 +41,6 @@ class PostsScreen(
         )
     }
 
-
     companion object {
 
         fun convertInputToAction() = ObservableTransformer<PostsInput, Action> { observable ->
