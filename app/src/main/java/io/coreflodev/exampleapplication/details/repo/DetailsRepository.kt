@@ -4,7 +4,7 @@ import io.reactivex.Observable
 
 interface DetailsRepository {
 
-    fun getPostForId(): Observable<Post>
+    fun getPostForId(id: String): Observable<Post>
 
     data class Post(
         val title: String,

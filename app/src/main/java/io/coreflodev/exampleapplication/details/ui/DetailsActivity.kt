@@ -11,6 +11,7 @@ import io.coreflodev.exampleapplication.details.DetailsInput
 import io.coreflodev.exampleapplication.details.DetailsOutput
 import io.coreflodev.exampleapplication.details.injection.DetailsStateHolder
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.activity_details.*
 import javax.inject.Inject
 
 class DetailsActivity : AppCompatActivity(), ScreenView<DetailsInput, DetailsOutput> {
@@ -20,7 +21,10 @@ class DetailsActivity : AppCompatActivity(), ScreenView<DetailsInput, DetailsOut
     override fun render(output: DetailsOutput) {
         when (output) {
             is DetailsOutput.Display -> {
-                
+                post_title.text = output.data.postTitle
+                post_body.text = output.data.postBody
+                user_name.text = output.data.userName
+                number_of_comments.text = output.data.numberOfComments
             }
             DetailsOutput.Loading -> TODO()
             DetailsOutput.Error -> TODO()
