@@ -11,12 +11,13 @@ abstract class Screen<I : ScreenInput, O : ScreenOutput> {
     private val disposables = CompositeDisposable()
 
     protected val input: Subject<I> = PublishSubject.create()
+    private val output by lazy { output() }
 
     protected abstract fun output(): Observable<O>
 
     fun attach(view: ScreenView<I, O>) {
         disposables.addAll(
-            output().observeOn(AndroidSchedulers.mainThread())
+            output.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::render),
 
             view.inputs()

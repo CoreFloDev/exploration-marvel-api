@@ -6,4 +6,5 @@ sealed class PostsInput : ScreenInput {
 
     data class ItemClicked(val id: String) : PostsInput()
 
+    object Retry : PostsInput()
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Example Application</string>
-    <string name="error">An error happened ¯_(ツ)_/¯   Please check your internet connexion</string>
+    <string name="error">An error happened ¯\\_(ツ)_/¯ \nPlease check your internet connexion</string>
+    <string name="retry">Retry</string>
 </resources>

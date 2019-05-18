@@ -22,14 +22,14 @@ class PostsScreen(
         }
         .compose(convertResultToOutput())
 
-
     companion object {
 
         fun convertInputToAction() = ObservableTransformer<PostsInput, Action> { observable ->
             observable.map { input ->
                 when (input) {
                     is PostsInput.ItemClicked -> Action.ItemClicked(input.id)
-                } as Action
+                    PostsInput.Retry -> Action.InitialAction
+                }
             }
                 .startWith(Action.InitialAction)
         }

@@ -1,10 +1,12 @@
 package io.coreflodev.exampleapplication.posts.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jakewharton.rxbinding3.view.clicks
 import io.coreflodev.exampleapplication.R
 import io.coreflodev.exampleapplication.common.arch.Screen
 import io.coreflodev.exampleapplication.common.arch.ScreenView
@@ -23,13 +25,29 @@ class PostsActivity : AppCompatActivity(), ScreenView<PostsInput, PostsOutput> {
 
     private val adapter = PostsAdapter()
 
-    override fun inputs(): Observable<PostsInput> = adapter.onItemClicked().map { PostsInput.ItemClicked(it) }
+    override fun inputs(): Observable<PostsInput> = Observable.mergeArray(
+        adapter.onItemClicked().map { PostsInput.ItemClicked(it) },
+        error_button.clicks().map { PostsInput.Retry }
+    )
 
     override fun render(output: PostsOutput) {
         when (output) {
-            is PostsOutput.Display -> adapter.update(output.data)
-            PostsOutput.Loading -> println("loading state")
-            PostsOutput.Error -> println("error state")
+            is PostsOutput.Display -> {
+                adapter.update(output.data)
+                loading_posts_activity.visibility = View.GONE
+                error_posts_activity.visibility = View.GONE
+                recycler_view_posts_activity.visibility = View.VISIBLE
+            }
+            PostsOutput.Loading -> {
+                error_posts_activity.visibility = View.GONE
+                recycler_view_posts_activity.visibility = View.GONE
+                loading_posts_activity.visibility = View.VISIBLE
+            }
+            PostsOutput.Error -> {
+                loading_posts_activity.visibility = View.GONE
+                recycler_view_posts_activity.visibility = View.GONE
+                error_posts_activity.visibility = View.VISIBLE
+            }
             is PostsOutput.ToDetail -> DetailsActivity.start(output.id, this)
         }
     }
