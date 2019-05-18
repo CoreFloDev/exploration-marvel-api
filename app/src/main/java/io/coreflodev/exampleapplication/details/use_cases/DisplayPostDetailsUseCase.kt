@@ -9,7 +9,7 @@ class DisplayPostDetailsUseCase(private val repo: DetailsRepository) {
         observable.flatMap { action ->
             repo.getPostForId(action.postId)
                 .map { Result.UiUpdate.Display(it) as Result }
-                //.onErrorReturnItem(Result.UiUpdate.Error)
+                .onErrorReturnItem(Result.UiUpdate.Error)
                 .startWith(Result.UiUpdate.Loading)
         }
     }
