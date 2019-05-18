@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.coreflodev.exampleapplication.R
 import io.coreflodev.exampleapplication.common.arch.Screen
 import io.coreflodev.exampleapplication.common.arch.ScreenView
+import io.coreflodev.exampleapplication.details.ui.DetailsActivity
 import io.coreflodev.exampleapplication.posts.PostsInput
 import io.coreflodev.exampleapplication.posts.PostsOutput
 import io.coreflodev.exampleapplication.posts.injection.PostsStateHolder
@@ -29,7 +30,7 @@ class PostsActivity : AppCompatActivity(), ScreenView<PostsInput, PostsOutput> {
             is PostsOutput.Display -> adapter.update(output.data)
             PostsOutput.Loading -> println("loading state")
             PostsOutput.Error -> println("error state")
-            is PostsOutput.ToDetail -> println("moving to ${output.id}")
+            is PostsOutput.ToDetail -> DetailsActivity.start(output.id, this)
         }
     }
 

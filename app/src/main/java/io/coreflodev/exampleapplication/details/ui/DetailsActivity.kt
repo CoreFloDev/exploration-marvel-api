@@ -1,8 +1,9 @@
 package io.coreflodev.exampleapplication.details.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.coreflodev.exampleapplication.R
 import io.coreflodev.exampleapplication.common.arch.Screen
@@ -39,7 +40,7 @@ class DetailsActivity : AppCompatActivity(), ScreenView<DetailsInput, DetailsOut
 
         setContentView(R.layout.activity_details)
 
-        ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+        ViewModelProviders.of(this, DetailsStateHolder.Factory(application, intent.getStringExtra(POST_ID)))
             .get(DetailsStateHolder::class.java)
             .detailsComponent
             .inject(this)
@@ -52,4 +53,14 @@ class DetailsActivity : AppCompatActivity(), ScreenView<DetailsInput, DetailsOut
         super.onDestroy()
     }
 
+    companion object {
+        private const val POST_ID = "post_id"
+
+        fun start(postId: String, activity: Activity) {
+            val intent = Intent(activity, DetailsActivity::class.java).apply {
+                putExtra(POST_ID, postId)
+            }
+            activity.startActivity(intent)
+        }
+    }
 }

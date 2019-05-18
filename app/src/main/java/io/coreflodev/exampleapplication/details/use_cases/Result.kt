@@ -1,12 +1,15 @@
 package io.coreflodev.exampleapplication.details.use_cases
 
-import io.coreflodev.exampleapplication.details.DetailsViewModel
+import io.coreflodev.exampleapplication.details.repo.DetailsRepository
 
 sealed class Result {
 
-    data class Display(val data: DetailsViewModel) : Result()
+    sealed class UiUpdate : Result() {
 
-    object Error : Result()
+        data class Display(val data: DetailsRepository.Post) : UiUpdate()
 
-    object Loading : Result()
+        object Error : UiUpdate()
+
+        object Loading : UiUpdate()
+    }
 }
