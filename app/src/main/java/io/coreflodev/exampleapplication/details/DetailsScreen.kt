@@ -1,49 +1,28 @@
 package io.coreflodev.exampleapplication.details
 
 import io.coreflodev.exampleapplication.common.arch.Screen
-import io.coreflodev.exampleapplication.common.arch.ScreenView
 import io.coreflodev.exampleapplication.details.use_cases.Action
 import io.coreflodev.exampleapplication.details.use_cases.DisplayPostDetailsUseCase
 import io.coreflodev.exampleapplication.details.use_cases.Result
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 
 class DetailsScreen(
-    postId: String,
-    displayPostDetailsUseCase: DisplayPostDetailsUseCase
+    private val postId: String,
+    private val displayPostDetailsUseCase: DisplayPostDetailsUseCase
 ) : Screen<DetailsInput, DetailsOutput>() {
 
-    private val input: Subject<DetailsInput> = PublishSubject.create()
-    private val output: Observable<DetailsOutput>
-
-    init {
-        output = input.compose(convertInputToAction(postId))
-            .doOnNext {
-                println("action $it")
-            }
+    override fun output(): Observable<DetailsOutput> =
+        input.compose(convertInputToAction(postId))
             .publish {
                 it.ofType(Action.InitialAction::class.java).compose(displayPostDetailsUseCase())
             }
             .compose(convertResultToOutput())
-    }
-
-    override fun onAttach(view: ScreenView<DetailsInput, DetailsOutput>) {
-        add(
-            output.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::render),
-
-            view.inputs()
-                .subscribe(input::onNext)
-        )
-    }
 
     companion object {
         fun convertInputToAction(postId: String) = ObservableTransformer<DetailsInput, Action> { observable ->
             observable
-                .map { it as Action } // no input expected
+                .map { Action.InitialAction(postId) as Action } // no input expected
                 .startWith(Action.InitialAction(postId))
         }
 
@@ -51,6 +30,7 @@ class DetailsScreen(
             observable.ofType(Result.UiUpdate::class.java)
                 .compose(reducingUiState())
                 .replay(1)
+                .autoConnect()
         }
 
         fun reducingUiState() = ObservableTransformer<Result.UiUpdate, DetailsOutput> { observable ->

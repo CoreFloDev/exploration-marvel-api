@@ -1,45 +1,27 @@
 package io.coreflodev.exampleapplication.posts
 
 import io.coreflodev.exampleapplication.common.arch.Screen
-import io.coreflodev.exampleapplication.common.arch.ScreenView
 import io.coreflodev.exampleapplication.posts.use_cases.Action
 import io.coreflodev.exampleapplication.posts.use_cases.LoadListOfPostsUseCase
 import io.coreflodev.exampleapplication.posts.use_cases.NavigateToDetailsUseCase
 import io.coreflodev.exampleapplication.posts.use_cases.Result
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 
 class PostsScreen(
-    loadListOfPostsUseCase: LoadListOfPostsUseCase,
-    navigateToDetailsUseCase: NavigateToDetailsUseCase
+    private val loadListOfPostsUseCase: LoadListOfPostsUseCase,
+    private val navigateToDetailsUseCase: NavigateToDetailsUseCase
 ) : Screen<PostsInput, PostsOutput>() {
 
-    private val input: Subject<PostsInput> = PublishSubject.create()
-    private val output: Observable<PostsOutput>
+    override fun output(): Observable<PostsOutput> = input.compose(convertInputToAction())
+        .publish {
+            Observable.mergeArray(
+                it.ofType(Action.ItemClicked::class.java).compose(navigateToDetailsUseCase()),
+                it.ofType(Action.InitialAction::class.java).compose(loadListOfPostsUseCase())
+            )
+        }
+        .compose(convertResultToOutput())
 
-    init {
-        output = input.compose(convertInputToAction())
-            .publish {
-                Observable.mergeArray(
-                    it.ofType(Action.ItemClicked::class.java).compose(navigateToDetailsUseCase()),
-                    it.ofType(Action.InitialAction::class.java).compose(loadListOfPostsUseCase())
-                )
-            }
-            .compose(convertResultToOutput())
-    }
-
-    override fun onAttach(view: ScreenView<PostsInput, PostsOutput>) {
-        add(
-            output.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::render),
-
-            view.inputs()
-                .subscribe(input::onNext)
-        )
-    }
 
     companion object {
 

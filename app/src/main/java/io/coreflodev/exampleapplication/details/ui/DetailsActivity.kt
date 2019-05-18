@@ -11,13 +11,10 @@ import io.coreflodev.exampleapplication.common.arch.ScreenView
 import io.coreflodev.exampleapplication.details.DetailsInput
 import io.coreflodev.exampleapplication.details.DetailsOutput
 import io.coreflodev.exampleapplication.details.injection.DetailsStateHolder
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_details.*
 import javax.inject.Inject
 
 class DetailsActivity : AppCompatActivity(), ScreenView<DetailsInput, DetailsOutput> {
-
-    override fun inputs(): Observable<DetailsInput> = Observable.empty()
 
     override fun render(output: DetailsOutput) {
         when (output) {
@@ -27,8 +24,8 @@ class DetailsActivity : AppCompatActivity(), ScreenView<DetailsInput, DetailsOut
                 user_name.text = output.data.userName
                 number_of_comments.text = output.data.numberOfComments
             }
-            DetailsOutput.Loading -> TODO()
-            DetailsOutput.Error -> TODO()
+            DetailsOutput.Loading -> println("loading")
+            DetailsOutput.Error -> println("error")
         }
     }
 
