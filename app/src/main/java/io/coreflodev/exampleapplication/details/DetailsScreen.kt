@@ -45,7 +45,7 @@ class DetailsScreen(
                             numberOfComments = uiState.data.numberOfComments
                         )
                     )
-                    Result.UiUpdate.Loading -> DetailsOutput.Error
+                    Result.UiUpdate.Loading -> DetailsOutput.Loading
                 }
             }
         }
