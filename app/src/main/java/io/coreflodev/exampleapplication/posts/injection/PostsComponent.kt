@@ -1,8 +1,10 @@
 package io.coreflodev.exampleapplication.posts.injection
 
 import dagger.Component
+import io.coreflodev.exampleapplication.common.arch.Screen
 import io.coreflodev.exampleapplication.common.injection.ApplicationComponent
-import io.coreflodev.exampleapplication.posts.ui.PostsActivity
+import io.coreflodev.exampleapplication.posts.PostsInput
+import io.coreflodev.exampleapplication.posts.PostsOutput
 
 @PostsScope
 @Component(
@@ -11,5 +13,5 @@ import io.coreflodev.exampleapplication.posts.ui.PostsActivity
 )
 interface PostsComponent {
 
-    fun inject(postsActivity: PostsActivity)
+    fun screen(): Screen<PostsInput, PostsOutput>
 }

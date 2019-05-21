@@ -19,5 +19,8 @@ class TypicodePostsRepository(
                     )
                 }
             }
+            .doOnError {
+                println("error received $it")
+            }
 
 }

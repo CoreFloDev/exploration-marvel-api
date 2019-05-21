@@ -5,9 +5,9 @@ import android.content.Context
 import io.coreflodev.exampleapplication.common.injection.ApplicationComponent
 import io.coreflodev.exampleapplication.common.injection.DaggerApplicationComponent
 
-class ExampleApplication : Application() {
+open class ExampleApplication : Application() {
 
-    private val applicationComponent: ApplicationComponent by lazy {
+    protected open val applicationComponent: ApplicationComponent by lazy {
         DaggerApplicationComponent.create()
     }
 

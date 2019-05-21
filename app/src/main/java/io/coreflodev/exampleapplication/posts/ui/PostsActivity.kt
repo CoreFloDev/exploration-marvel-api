@@ -16,12 +16,10 @@ import io.coreflodev.exampleapplication.posts.PostsOutput
 import io.coreflodev.exampleapplication.posts.injection.PostsStateHolder
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_posts.*
-import javax.inject.Inject
 
-class PostsActivity : AppCompatActivity(), ScreenView<PostsInput, PostsOutput> {
+open class PostsActivity : AppCompatActivity(), ScreenView<PostsInput, PostsOutput> {
 
-    @Inject
-    lateinit var screen: Screen<PostsInput, PostsOutput>
+    private lateinit var screen: Screen<PostsInput, PostsOutput>
 
     private val adapter = PostsAdapter()
 
@@ -56,10 +54,10 @@ class PostsActivity : AppCompatActivity(), ScreenView<PostsInput, PostsOutput> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posts)
 
-        ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+        screen = ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
             .get(PostsStateHolder::class.java)
             .postsComponent
-            .inject(this)
+            .screen()
 
         screen.attach(this)
 
