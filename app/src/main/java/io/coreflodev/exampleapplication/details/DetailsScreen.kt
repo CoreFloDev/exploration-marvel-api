@@ -22,7 +22,7 @@ class DetailsScreen(
     companion object {
         fun convertInputToAction(postId: String) = ObservableTransformer<DetailsInput, Action> { observable ->
             observable
-                .map { Action.InitialAction(postId) as Action } // no input expected
+                .map<Action> { Action.InitialAction(postId) } // no input expected
                 .startWith(Action.InitialAction(postId))
         }
 

@@ -8,7 +8,7 @@ class DisplayPostDetailsUseCase(private val repo: DetailsRepository) {
     operator fun invoke(): ObservableTransformer<Action.InitialAction, Result> = ObservableTransformer { observable ->
         observable.flatMap { action ->
             repo.getPostForId(action.postId)
-                .map { Result.UiUpdate.Display(it) as Result }
+                .map<Result> { Result.UiUpdate.Display(it) }
                 .onErrorReturnItem(Result.UiUpdate.Error)
                 .startWith(Result.UiUpdate.Loading)
         }

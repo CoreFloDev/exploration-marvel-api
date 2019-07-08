@@ -8,7 +8,7 @@ class LoadListOfPostsUseCase(private val postsRepository: PostsRepository) {
     operator fun invoke(): ObservableTransformer<Action.InitialAction, Result> = ObservableTransformer { observable ->
         observable.flatMap {
             postsRepository.getListOfPosts()
-                .map { Result.UiUpdate.Display(it) as Result }
+                .map<Result> { Result.UiUpdate.Display(it) }
                 .onErrorReturnItem(Result.UiUpdate.Error)
                 .startWith(Result.UiUpdate.Loading)
         }

@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PostsTest {
 
-    private val activity = ActivityTestRule<PostsActivity>(PostsActivity::class.java, false, false)
+    private val activity = ActivityTestRule(PostsActivity::class.java, false, false)
     private val httpServerRule = HttpServerRule()
 
     @get:Rule

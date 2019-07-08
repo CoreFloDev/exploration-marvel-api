@@ -20,7 +20,7 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
     private val inputs: Subject<String> = PublishSubject.create()
     private val subscriptions = CompositeDisposable()
 
-    private val differ = AsyncListDiffer<PostsViewModel>(this, object : DiffUtil.ItemCallback<PostsViewModel>() {
+    private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<PostsViewModel>() {
         override fun areItemsTheSame(oldItem: PostsViewModel, newItem: PostsViewModel) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: PostsViewModel, newItem: PostsViewModel) = oldItem == newItem
