@@ -8,7 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import io.coreflodev.exampleapplication.core.HttpServerRule
-import io.coreflodev.exampleapplication.posts.ui.PostsActivity
+import io.coreflodev.exampleapplication.comics.ComicsActivity
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PostsTest {
 
-    private val activity = ActivityTestRule(PostsActivity::class.java, false, false)
+    private val activity = ActivityTestRule(ComicsActivity::class.java, false, false)
     private val httpServerRule = HttpServerRule()
 
     @get:Rule

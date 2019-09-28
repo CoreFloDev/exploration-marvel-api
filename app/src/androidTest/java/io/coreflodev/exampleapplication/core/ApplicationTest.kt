@@ -1,10 +1,10 @@
 package io.coreflodev.exampleapplication.core
 
-import io.coreflodev.exampleapplication.common.ExampleApplication
+import io.coreflodev.exampleapplication.common.MarvelApplication
 import io.coreflodev.exampleapplication.common.injection.ApplicationComponent
 import io.coreflodev.exampleapplication.common.injection.DaggerApplicationComponent
 
-class ApplicationTest : ExampleApplication() {
+class ApplicationTest : MarvelApplication() {
 
     override val applicationComponent: ApplicationComponent
         get() = DaggerApplicationComponent.builder()

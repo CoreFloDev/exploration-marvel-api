@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".common.ExampleApplication"
+        android:name=".common.MarvelApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,12 +16,11 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".posts.ui.PostsActivity" />
-        <activity android:name=".details.ui.DetailsActivity" />
+        <activity android:name=".comics.ComicsActivity" />
 
         <activity-alias
             android:name=".Launcher"
-            android:targetActivity=".posts.ui.PostsActivity">
+            android:targetActivity=".comics.ComicsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
