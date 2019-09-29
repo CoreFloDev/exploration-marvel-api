@@ -54,13 +54,13 @@ open class ApplicationModule(private val context: Context) {
 
         return OkHttpClient.Builder()
             .cache(cache)
+            .addInterceptor(CacheInterceptor())
             .addInterceptor(
                 AuthenticationInterceptor(
                     BuildConfig.MARVEL_API_KEY,
                     BuildConfig.MARVEL_PRIVATE_KEY
                 )
             )
-            .addInterceptor(CacheInterceptor())
             .build()
     }
 
