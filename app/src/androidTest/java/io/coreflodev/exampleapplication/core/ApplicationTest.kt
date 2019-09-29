@@ -8,6 +8,6 @@ class ApplicationTest : MarvelApplication() {
 
     override val applicationComponent: ApplicationComponent
         get() = DaggerApplicationComponent.builder()
-            .applicationModule(ApplicationModuleTest())
+            .applicationModule(ApplicationModuleTest(baseContext))
             .build()
 }

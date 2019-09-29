@@ -9,7 +9,7 @@ class LoadListOfComicsUseCase(private val comicsRepository: ComicsRepository) {
         observable.flatMap {
             comicsRepository.getListOfComics()
                 .map<Result> { Result.UiUpdate.Display(it) }
-                .onErrorReturnItem(Result.UiUpdate.Error)
+                //.onErrorReturnItem(Result.UiUpdate.Error)
                 .startWith(Result.UiUpdate.Loading)
         }
     }

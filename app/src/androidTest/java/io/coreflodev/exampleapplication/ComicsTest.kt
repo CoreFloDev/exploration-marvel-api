@@ -28,24 +28,26 @@ class ComicsTest {
 
     @Test
     fun givenDisplayStateReceived_WhenEverythingIsFine_thenDisplayStateIsShowed() {
-        val expectedMessage = "a message"
+        val expectedTitle = "a title"
 
         httpServerRule.mockWebServer.enqueue(
             MockResponse().setResponseCode(200)
                 .setBody(
                     """
-  [{
-    "userId": 1,
-    "id": 1,
-    "title": "title 1",
-    "body": "$expectedMessage"
-  },
-  {
-    "userId": 1,
-    "id": 2,
-    "title": "title 2",
-    "body": "this is an other body"
-  }]
+{
+    "data":{
+        "results":[
+            {
+                "id":"1332",
+                "title":"$expectedTitle",
+                "thumbnail":{
+                    "path":"http://i.annihil.us/u/prod/marvel/i/mg/9/d0/58b5cfb6d5239",
+                    "extension":"jpg"
+                }
+            }
+        ]
+    }
+}
             """.trimIndent()
                 )
         )
@@ -53,6 +55,6 @@ class ComicsTest {
         activity.launchActivity(Intent())
 
 
-        onView(withText(expectedMessage)).check(matches(isDisplayed()))
+        onView(withText(expectedTitle)).check(matches(isDisplayed()))
     }
 }
