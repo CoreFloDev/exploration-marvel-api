@@ -4,7 +4,7 @@ import io.reactivex.Observable
 
 interface ComicsRepository {
 
-    fun getListOfPosts(): Observable<List<Post>>
+    fun getListOfComics(): Observable<List<Comics>>
 
-    data class Post(val id: String, val content: String)
+    data class Comics(val id: String, val content: String)
 }

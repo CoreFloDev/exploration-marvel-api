@@ -6,7 +6,7 @@ import io.coreflodev.exampleapplication.details.repo.DetailsRepository
 import io.reactivex.Observable
 import org.junit.Test
 
-class DisplayPostDetailsUseCaseTest {
+class DisplayComicsDetailsUseCaseTest {
 
     private val repo: DetailsRepository = mock()
     private val useCase = DisplayPostDetailsUseCase(repo)

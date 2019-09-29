@@ -13,6 +13,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "io.coreflodev.exampleapplication.core.TestRunner"
+
+        Properties properties = new Properties()
+        if (project.rootProject.file('local.properties').canRead()) {
+            properties.load(project.rootProject.file("local.properties").newDataInputStream())
+        }
+
+        if (properties.getProperty('marvel.privateKey', '').empty || properties.getProperty('marvel.apiKey','').empty) {
+            System.err.println("Please set marvel.privateKey and marvel.apiKey on your local.properties")
+        }
+
+        buildConfigField 'String', 'MARVEL_PRIVATE_KEY', properties.getProperty('marvel.privateKey', '')
+        buildConfigField 'String', 'MARVEL_API_KEY', properties.getProperty('marvel.apiKey', '')
     }
 
     buildTypes {

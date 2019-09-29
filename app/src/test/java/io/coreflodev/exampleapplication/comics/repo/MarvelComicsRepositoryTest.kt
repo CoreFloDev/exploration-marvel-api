@@ -17,7 +17,7 @@ class MarvelComicsRepositoryTest {
         val expectedError = Throwable()
         whenever(apiMock.getPosts()).thenReturn(Single.error(expectedError))
 
-        repo.getListOfPosts()
+        repo.getListOfComics()
             .test()
             .assertError(expectedError)
     }
@@ -26,7 +26,7 @@ class MarvelComicsRepositoryTest {
     fun `when the api return a list of post then that list is transformed into an expected object`() {
         whenever(apiMock.getPosts()).thenReturn(Single.just(listOf(AN_API_POST)))
 
-        repo.getListOfPosts()
+        repo.getListOfComics()
             .test()
             .assertValue(listOf(EXPECTED_POST))
     }
@@ -43,7 +43,7 @@ class MarvelComicsRepositoryTest {
             userId = "aUserId"
         )
 
-        private val EXPECTED_POST = ComicsRepository.Post(
+        private val EXPECTED_POST = ComicsRepository.Comics(
             id = AN_ID,
             content = A_BODY
         )

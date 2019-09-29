@@ -13,7 +13,7 @@ class LoadListOfComicsUseCaseTest {
 
     @Test
     fun `given an initial action is received when the list of post fails then a result loading and error are returned`() {
-        whenever(repoMock.getListOfPosts()).thenReturn(Observable.error(Throwable()))
+        whenever(repoMock.getListOfComics()).thenReturn(Observable.error(Throwable()))
 
         Observable.just(Action.InitialAction)
             .compose(useCase())
@@ -23,7 +23,7 @@ class LoadListOfComicsUseCaseTest {
 
     @Test
     fun `given an initial action is received when the list is empty then a result loading is returned`() {
-        whenever(repoMock.getListOfPosts()).thenReturn(Observable.empty())
+        whenever(repoMock.getListOfComics()).thenReturn(Observable.empty())
 
         Observable.just(Action.InitialAction)
             .compose(useCase())
@@ -33,7 +33,7 @@ class LoadListOfComicsUseCaseTest {
 
     @Test
     fun `given an initial action is received when the list contains some items then a result loading and display are returned`() {
-        whenever(repoMock.getListOfPosts()).thenReturn(Observable.just(listOf(A_POST)))
+        whenever(repoMock.getListOfComics()).thenReturn(Observable.just(listOf(A_POST)))
 
         Observable.just(Action.InitialAction)
             .compose(useCase())
@@ -43,6 +43,6 @@ class LoadListOfComicsUseCaseTest {
 
     companion object {
 
-        private val A_POST = ComicsRepository.Post("0", "any content")
+        private val A_POST = ComicsRepository.Comics("0", "any content")
     }
 }

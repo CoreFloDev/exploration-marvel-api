@@ -9,7 +9,7 @@ sealed class Result {
 
         object Loading : UiUpdate()
 
-        data class Display(val data: List<ComicsRepository.Post>) : UiUpdate()
+        data class Display(val data: List<ComicsRepository.Comics>) : UiUpdate()
     }
 
     sealed class Navigation : Result() {

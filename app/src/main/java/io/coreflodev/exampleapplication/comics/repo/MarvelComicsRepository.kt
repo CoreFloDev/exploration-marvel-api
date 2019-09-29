@@ -7,20 +7,19 @@ class MarvelComicsRepository(
     private val marvelApi: MarvelApi
 ) : ComicsRepository {
 
-    override fun getListOfPosts(): Observable<List<ComicsRepository.Post>> =
+    override fun getListOfComics(): Observable<List<ComicsRepository.Comics>> =
         marvelApi
-            .getPosts()
+            .getComics()
             .toObservable()
-            .map { postsList ->
-                postsList.map {
-                    ComicsRepository.Post(
-                        id = it.id,
-                        content = it.body
-                    )
+            .map { comics ->
+                comics.data?.results.orEmpty()
+                    .filter { it.title != null && it.id != null }
+                    .map {
+                        ComicsRepository.Comics(
+                            id = it.id!!,
+                            content = it.title!!
+                        )
                 }
-            }
-            .doOnError {
-                println("error received $it")
             }
 
 }

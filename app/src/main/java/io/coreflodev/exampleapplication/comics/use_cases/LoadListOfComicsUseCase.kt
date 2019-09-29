@@ -7,7 +7,7 @@ class LoadListOfComicsUseCase(private val comicsRepository: ComicsRepository) {
 
     operator fun invoke(): ObservableTransformer<Action.InitialAction, Result> = ObservableTransformer { observable ->
         observable.flatMap {
-            comicsRepository.getListOfPosts()
+            comicsRepository.getListOfComics()
                 .map<Result> { Result.UiUpdate.Display(it) }
                 .onErrorReturnItem(Result.UiUpdate.Error)
                 .startWith(Result.UiUpdate.Loading)
