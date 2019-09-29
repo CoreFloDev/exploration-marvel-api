@@ -33,16 +33,16 @@ class LoadListOfComicsUseCaseTest {
 
     @Test
     fun `given an initial action is received when the list contains some items then a result loading and display are returned`() {
-        whenever(repoMock.getListOfComics()).thenReturn(Observable.just(listOf(A_POST)))
+        whenever(repoMock.getListOfComics()).thenReturn(Observable.just(listOf(A_COMIC)))
 
         Observable.just(Action.InitialAction)
             .compose(useCase())
             .test()
-            .assertValues(Result.UiUpdate.Loading, Result.UiUpdate.Display(listOf(A_POST)))
+            .assertValues(Result.UiUpdate.Loading, Result.UiUpdate.Display(listOf(A_COMIC)))
     }
 
     companion object {
 
-        private val A_POST = ComicsRepository.Comics("0", "any content")
+        private val A_COMIC = ComicsRepository.Comics("0", "any content")
     }
 }

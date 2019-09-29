@@ -1,6 +1,5 @@
 package io.coreflodev.exampleapplication.common.injection
 
-import android.os.Build
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -29,7 +28,10 @@ open class ApplicationModule {
             .build()
 
     @Provides
-    fun provideRetrofit(moshi: Moshi, @Named(SERVER_URL) serverUrl: String, okHttpClient: OkHttpClient): Retrofit =
+    fun provideRetrofit(
+        moshi: Moshi, @Named(SERVER_URL) serverUrl: String,
+        okHttpClient: OkHttpClient
+    ): Retrofit =
         Retrofit.Builder()
             .baseUrl(serverUrl)
             .client(okHttpClient)
@@ -43,10 +45,12 @@ open class ApplicationModule {
 
     @Provides
     fun provideOkHttpClient() = OkHttpClient.Builder()
-        .addInterceptor(AuthenticationInterceptor(
-            BuildConfig.MARVEL_API_KEY,
-            BuildConfig.MARVEL_PRIVATE_KEY
-        ))
+        .addInterceptor(
+            AuthenticationInterceptor(
+                BuildConfig.MARVEL_API_KEY,
+                BuildConfig.MARVEL_PRIVATE_KEY
+            )
+        )
         .build()
 
     companion object {

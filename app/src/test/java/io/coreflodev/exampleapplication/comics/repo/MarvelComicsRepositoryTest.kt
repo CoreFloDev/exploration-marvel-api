@@ -2,8 +2,11 @@ package io.coreflodev.exampleapplication.comics.repo
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import io.coreflodev.exampleapplication.common.network.posts.Post
 import io.coreflodev.exampleapplication.common.network.MarvelApi
+import io.coreflodev.exampleapplication.common.network.comics.Comic
+import io.coreflodev.exampleapplication.common.network.comics.ComicDataContainer
+import io.coreflodev.exampleapplication.common.network.comics.ComicDataWrapper
+import io.coreflodev.exampleapplication.common.network.comics.Image
 import io.reactivex.Single
 import org.junit.Test
 
@@ -15,7 +18,7 @@ class MarvelComicsRepositoryTest {
     @Test
     fun `when the api return an error then the error is received`() {
         val expectedError = Throwable()
-        whenever(apiMock.getPosts()).thenReturn(Single.error(expectedError))
+        whenever(apiMock.getComics()).thenReturn(Single.error(expectedError))
 
         repo.getListOfComics()
             .test()
@@ -24,7 +27,7 @@ class MarvelComicsRepositoryTest {
 
     @Test
     fun `when the api return a list of post then that list is transformed into an expected object`() {
-        whenever(apiMock.getPosts()).thenReturn(Single.just(listOf(AN_API_POST)))
+        whenever(apiMock.getComics()).thenReturn(Single.just(AN_API_COMICS))
 
         repo.getListOfComics()
             .test()
@@ -34,18 +37,26 @@ class MarvelComicsRepositoryTest {
     companion object {
 
         private const val AN_ID = "anId"
-        private const val A_BODY = "aBody"
+        private const val A_MARVEL_TITLE = "marvelTitle"
+        private const val PATH = "http://perdu.com/image.png"
 
-        private val AN_API_POST = Post(
-            id = AN_ID,
-            body = A_BODY,
-            title = "aTitle",
-            userId = "aUserId"
+        private val AN_API_COMICS = ComicDataWrapper(
+            data = ComicDataContainer(
+                results = listOf(
+                    Comic(
+                        id = AN_ID,
+                        title = A_MARVEL_TITLE,
+                        thumbnail = Image(
+                            path = PATH
+                        )
+                    )
+                )
+            )
         )
 
         private val EXPECTED_POST = ComicsRepository.Comics(
             id = AN_ID,
-            content = A_BODY
+            content = A_MARVEL_TITLE
         )
     }
 }
