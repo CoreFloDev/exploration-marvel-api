@@ -10,7 +10,7 @@ class AuthenticationInterceptor(
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val timestamp = (System.currentTimeMillis() / 1000).toString()
+        val timestamp = 1569780431.toString()
         val hash = hashMd5(timestamp + privateKey + apiKey)
 
         val request = chain.request()

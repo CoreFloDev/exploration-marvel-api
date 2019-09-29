@@ -9,7 +9,7 @@ class CacheInterceptor : Interceptor {
         val offlineRequest = chain.request().newBuilder()
             .header(
                 "Cache-Control",
-                "public, only-if-cached,max-stale=$TEN_MINUTES"
+                "public, only-if-cached, max-stale=$TEN_MINUTES"
             )
             .build()
         val response = chain.proceed(offlineRequest)

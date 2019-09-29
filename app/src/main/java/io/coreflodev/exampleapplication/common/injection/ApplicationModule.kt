@@ -66,6 +66,6 @@ open class ApplicationModule(private val context: Context) {
 
     companion object {
         const val SERVER_URL = "SERVER_URL"
-        private const val TEN_MEGA_BYTES = 10L * 1024 * 1024
+        private const val TEN_MEGA_BYTES = 10L * 1024L * 1024L
     }
 }
