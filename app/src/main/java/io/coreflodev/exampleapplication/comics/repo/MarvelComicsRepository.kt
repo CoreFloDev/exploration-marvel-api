@@ -13,11 +13,12 @@ class MarvelComicsRepository(
             .toObservable()
             .map { comics ->
                 comics.data?.results.orEmpty()
-                    .filter { it.title != null && it.id != null }
+                    .filter { it.title != null && it.id != null && it.thumbnail?.path != null && it.thumbnail.extension != null }
                     .map {
                         ComicsRepository.Comics(
                             id = it.id!!,
-                            content = it.title!!
+                            content = it.title!!,
+                            thumbnail = "${it.thumbnail?.path!!}.${it.thumbnail.extension!!}"
                         )
                 }
             }

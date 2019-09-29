@@ -13,7 +13,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.posts_item.view.*
+import kotlinx.android.synthetic.main.comics_item.view.*
 
 class ComicsAdapter : RecyclerView.Adapter<ComicsAdapter.PostViewHolder>() {
 
@@ -27,7 +27,7 @@ class ComicsAdapter : RecyclerView.Adapter<ComicsAdapter.PostViewHolder>() {
     })
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder =
-        PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.posts_item, parent, false))
+        PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.comics_item, parent, false))
 
     override fun getItemCount() = differ.currentList.size
 
@@ -38,7 +38,7 @@ class ComicsAdapter : RecyclerView.Adapter<ComicsAdapter.PostViewHolder>() {
             .map { item.id }
             .subscribe(inputs::onNext))
 
-        holder.bind(item.content)
+        holder.bind(item.content, item.url)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) = subscriptions.clear()
@@ -51,10 +51,12 @@ class ComicsAdapter : RecyclerView.Adapter<ComicsAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val content = itemView.content_posts_item
+        private val content = itemView.content_comics_item
+        private val image = itemView.content_comics_image
 
-        fun bind(postContent: String) {
-            content.text = postContent
+        fun bind(comicsContent: String, url: String) {
+            content.text = comicsContent
+            image.load(url)
         }
     }
 }

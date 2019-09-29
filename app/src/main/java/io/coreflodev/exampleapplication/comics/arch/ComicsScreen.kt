@@ -61,7 +61,8 @@ class ComicsScreen(
                         uiState.data.map {
                             ComicsViewModel(
                                 it.id,
-                                it.content
+                                it.content,
+                                it.thumbnail
                             )
                         })
                 }

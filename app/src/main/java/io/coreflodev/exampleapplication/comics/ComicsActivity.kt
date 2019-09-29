@@ -14,7 +14,7 @@ import io.coreflodev.exampleapplication.comics.arch.ComicsInput
 import io.coreflodev.exampleapplication.comics.arch.ComicsOutput
 import io.coreflodev.exampleapplication.comics.injection.ComicsStateHolder
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_posts.*
+import kotlinx.android.synthetic.main.activity_comics.*
 
 open class ComicsActivity : AppCompatActivity(), ScreenView<ComicsInput, ComicsOutput> {
 
@@ -31,27 +31,27 @@ open class ComicsActivity : AppCompatActivity(), ScreenView<ComicsInput, ComicsO
         when (output) {
             is ComicsOutput.Display -> {
                 adapter.update(output.data)
-                loading_posts_activity.visibility = View.GONE
-                error_posts_activity.visibility = View.GONE
-                recycler_view_posts_activity.visibility = View.VISIBLE
+                loading_comics_activity.visibility = View.GONE
+                error_comics_activity.visibility = View.GONE
+                recycler_view_comics_activity.visibility = View.VISIBLE
             }
             ComicsOutput.Loading -> {
-                error_posts_activity.visibility = View.GONE
-                recycler_view_posts_activity.visibility = View.GONE
-                loading_posts_activity.visibility = View.VISIBLE
+                error_comics_activity.visibility = View.GONE
+                recycler_view_comics_activity.visibility = View.GONE
+                loading_comics_activity.visibility = View.VISIBLE
             }
             ComicsOutput.Error -> {
-                loading_posts_activity.visibility = View.GONE
-                recycler_view_posts_activity.visibility = View.GONE
-                error_posts_activity.visibility = View.VISIBLE
+                loading_comics_activity.visibility = View.GONE
+                recycler_view_comics_activity.visibility = View.GONE
+                error_comics_activity.visibility = View.VISIBLE
             }
-            is ComicsOutput.ToDetail -> println("move to the next activity")
+            is ComicsOutput.ToDetail -> println("move to the next activity (TODO)")
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_posts)
+        setContentView(R.layout.activity_comics)
 
         screen = ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
             .get(ComicsStateHolder::class.java)
@@ -60,8 +60,8 @@ open class ComicsActivity : AppCompatActivity(), ScreenView<ComicsInput, ComicsO
 
         screen.attach(this)
 
-        recycler_view_posts_activity.layoutManager = LinearLayoutManager(this)
-        recycler_view_posts_activity.adapter = adapter
+        recycler_view_comics_activity.layoutManager = LinearLayoutManager(this)
+        recycler_view_comics_activity.adapter = adapter
     }
 
     override fun onDestroy() {

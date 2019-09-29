@@ -6,5 +6,5 @@ interface ComicsRepository {
 
     fun getListOfComics(): Observable<List<Comics>>
 
-    data class Comics(val id: String, val content: String)
+    data class Comics(val id: String, val content: String, val thumbnail: String)
 }
