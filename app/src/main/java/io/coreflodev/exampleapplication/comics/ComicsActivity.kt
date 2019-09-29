@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding3.view.clicks
 import io.coreflodev.exampleapplication.R
@@ -60,7 +61,7 @@ open class ComicsActivity : AppCompatActivity(), ScreenView<ComicsInput, ComicsO
 
         screen.attach(this)
 
-        recycler_view_comics_activity.layoutManager = LinearLayoutManager(this)
+        recycler_view_comics_activity.layoutManager = GridLayoutManager(this, 2)
         recycler_view_comics_activity.adapter = adapter
     }
 

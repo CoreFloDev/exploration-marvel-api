@@ -7,7 +7,7 @@
 
     <io.coreflodev.exampleapplication.common.ui.NetworkImageView
         android:layout_width="match_parent"
-        android:layout_height="104dp"
+        android:layout_height="196dp"
         android:scaleType="centerCrop"
         android:id="@+id/content_comics_image"
         app:layout_constraintBottom_toBottomOf="parent"
