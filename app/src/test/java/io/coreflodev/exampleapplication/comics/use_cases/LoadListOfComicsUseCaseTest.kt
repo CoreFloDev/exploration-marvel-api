@@ -43,6 +43,6 @@ class LoadListOfComicsUseCaseTest {
 
     companion object {
 
-        private val A_COMIC = ComicsRepository.Comics("0", "any content")
+        private val A_COMIC = ComicsRepository.Comics("0", "any content", "any thumbnail")
     }
 }

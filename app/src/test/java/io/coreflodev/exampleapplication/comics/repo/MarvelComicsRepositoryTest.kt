@@ -38,7 +38,8 @@ class MarvelComicsRepositoryTest {
 
         private const val AN_ID = "anId"
         private const val A_MARVEL_TITLE = "marvelTitle"
-        private const val PATH = "http://perdu.com/image.png"
+        private const val PATH = "http://perdu.com/image"
+        private const val EXTENSION = "png"
 
         private val AN_API_COMICS = ComicDataWrapper(
             data = ComicDataContainer(
@@ -47,7 +48,8 @@ class MarvelComicsRepositoryTest {
                         id = AN_ID,
                         title = A_MARVEL_TITLE,
                         thumbnail = Image(
-                            path = PATH
+                            path = PATH,
+                            extension = EXTENSION
                         )
                     )
                 )
@@ -56,7 +58,8 @@ class MarvelComicsRepositoryTest {
 
         private val EXPECTED_POST = ComicsRepository.Comics(
             id = AN_ID,
-            content = A_MARVEL_TITLE
+            content = A_MARVEL_TITLE,
+            thumbnail = "$PATH.$EXTENSION"
         )
     }
 }
