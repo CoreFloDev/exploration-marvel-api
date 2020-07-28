@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding3.view.clicks
 import io.coreflodev.exampleapplication.R
 import io.coreflodev.exampleapplication.common.arch.Screen
@@ -54,7 +52,7 @@ open class ComicsActivity : AppCompatActivity(), ScreenView<ComicsInput, ComicsO
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comics)
 
-        screen = ViewModelProviders.of(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+        screen = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
             .get(ComicsStateHolder::class.java)
             .comicsComponent
             .screen()
